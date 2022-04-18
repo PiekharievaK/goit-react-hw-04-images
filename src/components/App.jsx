@@ -23,7 +23,7 @@ function App() {
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
-    if (isPending) {
+    if (!query) {return}
       fechImages(page, query).then(res => {
         if (res.total === 0) {
           Notify.failure('There is no results');
@@ -39,8 +39,8 @@ function App() {
           return;
         }
       });
-    }
-  }, [page, query]);
+    
+  }, [page, query, ]);
 
   const onSubmit = async inputQuery => {
     if (query === inputQuery) {
@@ -51,6 +51,7 @@ function App() {
     setIsPending(true);
     setPage(1);
     setQuery(inputQuery);
+      
   };
 
   const onLoadMore = () => {
