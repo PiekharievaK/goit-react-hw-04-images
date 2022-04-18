@@ -30,7 +30,7 @@ function App() {
           setImages({});
           return;
         }
-        setImages(page > 1 ? [...images, ...res.hits] : res.hits);
+        setImages(prevState => { return page > 1 ? [...prevState, ...res.hits] : res.hits});
         setIsPending(false);
         setTotalResults(res.total);
 
@@ -40,7 +40,7 @@ function App() {
         }
       });
     
-  }, [page, query, ]);
+  }, [page, query,totalResults ]);
 
   const onSubmit = async inputQuery => {
     if (query === inputQuery) {
