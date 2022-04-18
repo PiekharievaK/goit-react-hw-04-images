@@ -1,54 +1,49 @@
-import { Component } from 'react';
 import s from './Searchbar.module.css';
+import { useState } from 'react';
 import { Notify } from 'notiflix';
 import PropTypes from 'prop-types';
 
-class Searchbar extends Component {
-  state = {
-    query: '',
+function Searchbar(props) {
+  const [query, setQuery] = useState('');
+
+  const onInput = ({ target: { name, value } }) => {
+    setQuery(value);
   };
 
-  onInput = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-
-  onSubmit = e => {
+  const onSubmit = e => {
     e.preventDefault();
-    const { onSubmit } = this.props;
 
-    if (this.state.query.trim() === '') {
+    if (query.trim() === '') {
       Notify.failure('Please fill the field');
       return;
     }
+    props.onSubmit(e.target.query.value);
 
-    onSubmit(this.state.query);
-
-    this.setState({ query: '' });
+    // setQuery('');
   };
 
-  render() {
-    return (
-      <header className={s.Searchbar}>
-        <form className={s.SearchForm} onSubmit={this.onSubmit}>
-          <button type="submit" className={s.Button}>
-            <span className={s.ButtonLabel}>Search</span>
-          </button>
+  return (
+    <header className={s.Searchbar}>
+      <form className={s.SearchForm} onSubmit={onSubmit}>
+        <button type="submit" className={s.Button}>
+          <span className={s.ButtonLabel}>Search</span>
+        </button>
 
-          <input
-            name="query"
-            value={this.state.query}
-            className={s.Input}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.onInput}
-          />
-        </form>
-      </header>
-    );
-  }
+        <input
+          name="query"
+          value={query}
+          className={s.Input}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={onInput}
+        />
+      </form>
+    </header>
+  );
 }
+
 Searchbar.propTypes = {
   onSubmit: PropTypes.func,
 };

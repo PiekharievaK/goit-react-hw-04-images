@@ -1,41 +1,37 @@
 import s from './Modal.module.css';
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-class Modal extends Component {
-  onModalClose = e => {
+function Modal(props) {
+  useEffect(() => {
+    window.addEventListener('keydown', onModalClose);
+    return () => {
+      window.removeEventListener('keydown', onModalClose);
+    };
+  }, []);
+
+  const onModalClose = e => {
     if (e.keyCode === 27) {
-      this.props.modalToggle();
+      props.modalToggle();
     }
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.onModalClose);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onModalClose);
-  }
-
-  render() {
-    const data = this.props;
-
-    return (
-      <div
-        className={s.Overlay}
-        onClick={e => {
-          if (e.target === e.currentTarget) {
-            data.modalToggle();
-          }
-        }}
-      >
-        <div >
-          <img className={s.Modal} src={data.largeUrl} alt={data.name} />
-        </div>
+  return (
+    <div
+      className={s.Overlay}
+      onClick={e => {
+        if (e.target === e.currentTarget) {
+          props.modalToggle();
+        }
+      }}
+    >
+      <div>
+        <img className={s.Modal} src={props.largeUrl} alt={props.name} />
       </div>
-    );
-  }
+    </div>
+  );
 }
+
 Modal.propTypes = {
   modalToggle: PropTypes.func,
   largeUrl: PropTypes.string,
