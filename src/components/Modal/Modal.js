@@ -8,7 +8,7 @@ function Modal(props) {
     return () => {
       window.removeEventListener('keydown', onModalClose);
     };
-  }, []);
+  });
 
   const onModalClose = e => {
     if (e.keyCode === 27) {
